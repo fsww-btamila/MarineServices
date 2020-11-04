@@ -189,8 +189,8 @@ module.exports.getOredersNew = async (request, res) => {
     const result = await Models.getOredersNew(reqParam);
     formOrdersMdaNew(request, result, function(OrdersArr){
     console.log("-----", Object.keys(OrdersArr).length);
-    let ordersArray = OrdersArr.slice(1, 5);
-    return res.json(ordersArray);
+    // let ordersArray = OrdersArr.slice(1, 5);
+    return res.json(OrdersArr);
     });
 
   }
@@ -349,9 +349,6 @@ const formOrdersMdaNew = (request, result, cb) => {
           returnData['OrderItems'] = orderItemObj;
         }
 
-        // console.log("OrderItemObj", returnData);
-
-
         // orderHeader form
         let ShipToVesselID = row.ShipToVesselID ? parseInt(row.ShipToVesselID) : null;
         let userId = row.UserID ? row.UserID : '';
@@ -480,15 +477,14 @@ const formOrdersMdaNew = (request, result, cb) => {
           }
           returnData['OrderHdr'] = formData;
         }
-        ordersObj['Orders'] = returnData;
-        OrdersArr.push(ordersObj);
+        OrdersArr.push(returnData);
       }
 
     }
   }
   // console.log("Arraydata", Arraydata);
   // form not Open Orders
-  var notOpenOdr = {};
+  // var notOpenOdr = {};
   if (Arraydata && Object.keys(Arraydata).length > 0) {
     for (var i = 0; i < Arraydata.length; i++) {
       let row = Arraydata[i];
@@ -499,11 +495,12 @@ const formOrdersMdaNew = (request, result, cb) => {
         odrProcessed[0]['OrderHdr']['SessionID'] = row.SessionID ? row.SessionID : null;
         odrProcessed[0]['OrderHdr']['IsSessionActive'] = row.IsSessionActive ? row.IsSessionActive : 'N';
         odrProcessed[0]['OrderHdr']['UserSesion'] = row.UserSesion ? row.UserSesion : null;
-        notOpenOdr['Orders'] = odrProcessed;
-        orderStsArr.push(notOpenOdr);
+        // notOpenOdr['Orders'] = odrProcessed;
+        orderStsArr.push(odrProcessed);
       }
     }
-    OrdersArr = [...OrdersArr, ...orderStsArr];
+    // console.log("orderStsArr", orderStsArr);
+    ordersObj['Orders'] = [...OrdersArr, ...orderStsArr];
   }
 
 
@@ -519,7 +516,6 @@ const formOrdersMdaNew = (request, result, cb) => {
     OrderUpdTime['ShipLastUpdatedTime'] = ((OrdersUpDtTm[0].ShipLastUpdatedTime).trim()) ? OrdersUpDtTm[0].ShipLastUpdatedTime : OrderSUDTM;
   }
   ordersObj['OrderUpdTime'] = OrderUpdTime;
-  OrdersArr = [...OrdersArr, ordersObj];
 
   const userSessionArr = {};
   if (userSession && Object.keys(userSession).length > 0) {
@@ -528,7 +524,6 @@ const formOrdersMdaNew = (request, result, cb) => {
     userSessionArr['IsSessionActive'] = (userSession[0].IsSessionActive) ? userSession[0].IsSessionActive : "N";
   }
   ordersObj["userSession"] = userSessionArr;
-  OrdersArr = [...OrdersArr, ordersObj];
 
-  cb(OrdersArr);
+  cb(ordersObj);
 }
