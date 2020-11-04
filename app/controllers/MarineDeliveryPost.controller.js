@@ -392,7 +392,7 @@ const formOrdersMdaNew = (request, result, cb) => {
         formData['ReceivingContactNumber'] = row.ReceivingContactNumber ? row.ReceivingContactNumber : '';
         formData['ShiptoID'] = row.ShiptoID ? parseInt(row.ShiptoID) : null;
         formData['SiteType'] = SiteType;
-        formData['Status'] = row.Status ? row.Status : 0;
+        formData['Status'] = (row.Status && row.Status!='undefined') ? row.Status : 0;
         formData['StatusCode'] = row.StatusCode ? row.StatusCode : 0;
         formData['ToSiteID'] = row.ToSiteID ? parseInt(row.ToSiteID) : 0;
         formData['INSiteAddress'] = INSiteAddress;
@@ -487,6 +487,7 @@ const formOrdersMdaNew = (request, result, cb) => {
   // var notOpenOdr = {};
   if (Arraydata && Object.keys(Arraydata).length > 0) {
     for (var i = 0; i < Arraydata.length; i++) {
+      let orders = new Array();
       let row = Arraydata[i];
       let odrProcessed = {};
       odrProcessed = JSON.parse(row.JsonParam);
@@ -496,8 +497,9 @@ const formOrdersMdaNew = (request, result, cb) => {
         odrProcessed[0]['OrderHdr']['IsSessionActive'] = row.IsSessionActive ? row.IsSessionActive : 'N';
         odrProcessed[0]['OrderHdr']['UserSesion'] = row.UserSesion ? row.UserSesion : null;
         // notOpenOdr['Orders'] = odrProcessed;
-        orderStsArr.push(odrProcessed);
+        orders.push(odrProcessed);
       }
+      orderStsArr = [...orderStsArr, ...orders[0]];
     }
   }
   ordersObj['Orders'] = [...OrdersArr, ...orderStsArr];
