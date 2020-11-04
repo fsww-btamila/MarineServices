@@ -499,9 +499,8 @@ const formOrdersMdaNew = (request, result, cb) => {
         orderStsArr.push(odrProcessed);
       }
     }
-    // console.log("orderStsArr", orderStsArr);
-    ordersObj['Orders'] = [...OrdersArr, ...orderStsArr];
   }
+  ordersObj['Orders'] = [...OrdersArr, ...orderStsArr];
 
 
   // form  orders last updated date and time
