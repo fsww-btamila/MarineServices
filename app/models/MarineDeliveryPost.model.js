@@ -71,6 +71,7 @@ postServices.saveOrder = async (req, result) => {
     // console.log("req", req.body.params[0].value);
     const request = pool1.request();
     let queyrParam = req.body.params[0].value;
+    queyrParam = encodeXml(queyrParam);
     let queryStr = "exec MN_UpdateOrders '" + queyrParam + "'";
     console.log("exec MN_UpdateOrders", queryStr);
     return result = await request.query(queryStr);
@@ -85,6 +86,7 @@ postServices.updateOrderNote = async (req, result) => {
     // console.log("req", req.body.params[0].value);
     const request = pool1.request();
     let queyrParam = req.body.params[0].value;
+    queyrParam = encodeXml(queyrParam);
     let queryStr = "exec MN_UpdateOrderNotesFromApp '" + queyrParam + "'";
     console.log("exec MN_UpdateOrderNotesFromApp", queryStr);
     return result = await request.query(queryStr);
@@ -113,6 +115,7 @@ postServices.postShipment = async (req, result) => {
     // console.log("req", req.body.params[0].value);
     const request = pool1.request();
     let queyrParam = req.body.params[0].value;
+    queyrParam = encodeXml(queyrParam);
     let queryStr = "exec MN_UpdateShipmentDetails '" + queyrParam + "'";
     console.log("exec MN_UpdateShipmentDetails", queryStr);
     return result = await request.query(queryStr);
@@ -205,6 +208,17 @@ postServices.getOredersNew = async (req, result) => {
     console.error('SQL error', err);
   }
 };
+
+function encodeXml(s) {
+  return (s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\*/g, '&#42;')
+      .replace(/\?/g, '&#63;')
+      .replace(/'/g, '&#39;')
+  );
+}
 
 
 module.exports = postServices;
