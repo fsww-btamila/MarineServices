@@ -443,7 +443,6 @@ const formOrdersMdaNew = (request, result, cb) => {
 
         //  form vessel array
         var vesselArr = new Array();
-        formData['Vessels'] = vesselArr;
         if (ShipToVesselID > 0) {
           Vessels['CustomerName'] = row.ARCustomerName ? row.ARCustomerName : '';
           Vessels['GrossTonnage'] = row.GrossTonnage ? row.GrossTonnage : '';
