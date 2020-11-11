@@ -136,7 +136,7 @@ module.exports.getOrderNotes = async (request, res) => {
   try {
     // console.log("getOrderNotes", request.query)
     const result = await Models.getOrderNotes(request.query);
-    return res.json(result.recordsets[0]);
+    return res.json(result.recordsets);
   }
   catch (err) {
     return res.json(err);
