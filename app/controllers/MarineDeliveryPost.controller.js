@@ -485,7 +485,8 @@ const formOrdersMdaNew = (request, result, cb) => {
   // console.log("Arraydata", Arraydata);
   // form not Open Orders
   // var notOpenOdr = {};
-  if (Arraydata && Object.keys(Arraydata).length > 0) {
+  // console.log("Arraydata[i]", Arraydata, Object.keys(Arraydata).length);
+  if (Arraydata && Object.keys(Arraydata).length > 1) {
     for (var i = 0; i < Arraydata.length; i++) {
       let orders = new Array();
       let row = Arraydata[i];
@@ -508,21 +509,32 @@ const formOrdersMdaNew = (request, result, cb) => {
   // form  orders last updated date and time
   // const getParams = JSON.stringify(request.body.OrdersInp);
   // var ParamsVal = JSON.parse(getParams);
-  const ParamsVal =  request.body.params[0].value;
-  var OrderLUDTM = ParamsVal.LastUpdatedDtTm;
-  var OrderSUDTM = ParamsVal.ShipLastUpdatedDtTm;
+  const ParamsVal =  JSON.parse(request.body.params[0].value);
+  var OrderLUDTM = ParamsVal.OrdersInp.LastUpdatedDtTm;
+  var OrderSUDTM = ParamsVal.OrdersInp.ShipLastUpdatedDtTm;
   const OrderUpdTime = {};
   if (OrdersUpDtTm && Object.keys(OrdersUpDtTm).length > 0) {
-    OrderUpdTime['LastUpdatedTime'] = ((OrdersUpDtTm[0].LastUpdatedTime).trim()) ? OrdersUpDtTm[0].LastUpdatedTime : OrderLUDTM;
-    OrderUpdTime['ShipLastUpdatedTime'] = ((OrdersUpDtTm[0].ShipLastUpdatedTime).trim()) ? OrdersUpDtTm[0].ShipLastUpdatedTime : OrderSUDTM;
+    OrderUpdTime['LastUpdatedTime'] =  OrdersUpDtTm[0].LastUpdatedTime;
+    OrderUpdTime['ShipLastUpdatedTime'] = OrdersUpDtTm[0].ShipLastUpdatedTime;
+  }else{
+    OrderUpdTime['LastUpdatedTime'] =  OrderLUDTM;
+    OrderUpdTime['ShipLastUpdatedTime'] = OrderSUDTM;
   }
   ordersObj['OrderUpdTime'] = OrderUpdTime;
 
   const userSessionArr = {};
+
+  // console.log("userSession", userSession, Object.keys(userSession).length )
+  
   if (userSession && Object.keys(userSession).length > 0) {
-    userSessionArr['SessionID'] = (userSession[0].SessionID) ? userSession[0].SessionID : null;
-    userSessionArr['LogOffTime'] = (userSession[0].LogOffTime) ? userSession[0].LogOffTime : null;
-    userSessionArr['IsSessionActive'] = (userSession[0].IsSessionActive) ? userSession[0].IsSessionActive : "N";
+    userSessionArr['SessionID'] = userSession[0].SessionID;
+    userSessionArr['LogOffTime'] = userSession[0].LogOffTime;
+    userSessionArr['IsSessionActive'] =  userSession[0].IsSessionActive;
+  }
+  else{
+    userSessionArr['SessionID'] =  null;
+    userSessionArr['LogOffTime'] =  null;
+    userSessionArr['IsSessionActive'] = "N";
   }
   ordersObj["userSession"] = userSessionArr;
 
