@@ -211,8 +211,7 @@ const formOrdersMdaNew = (request, result, cb) => {
   userSession = result.recordsets[5];
 
   // console.log("Arraydata", Arraydata);
-  // console.log("orderArr", orderArr);
-
+  // console.log("orderArr", orderArr); 
   var orderStsArr = new Array(), OrdersArr = new Array();
 
   if (Object.keys(orderArr).length > 0) {
@@ -443,7 +442,8 @@ const formOrdersMdaNew = (request, result, cb) => {
         formData['Vehicle'] = Vehicle;
 
         //  form vessel array
-        formData['Vessels'] = Vessels;
+        var vesselArr = new Array();
+        formData['Vessels'] = vesselArr;
         if (ShipToVesselID > 0) {
           Vessels['CustomerName'] = row.ARCustomerName ? row.ARCustomerName : '';
           Vessels['GrossTonnage'] = row.GrossTonnage ? row.GrossTonnage : '';
@@ -454,10 +454,12 @@ const formOrdersMdaNew = (request, result, cb) => {
           Vessels['VesselDescr'] = row.VesselDescr ? row.VesselDescr : null;
           Vessels['VesselID'] = row.VesselID ? parseInt(row.VesselID) : null;
           Vessels['dfVesselCode'] = row.VesselCode ? row.VesselCode : null;
-          formData['Vessels'] = Vessels;
+          vesselArr.push(Vessels);
         }
+        formData['Vessels'] = vesselArr;
 
-        formData['OrderNotes'] = OrderNotes;
+        var OrderNotesArr = new Array();
+        formData['OrderNotes'] = OrderNotesArr;
         OrderUpdTime['LastUpdatedTime'] = LastUpdatedTime;
         returnData['OrderHdr'] = formData;
 
@@ -472,9 +474,10 @@ const formOrdersMdaNew = (request, result, cb) => {
               OrderNotes['Note'] = notesArr.Note ? notesArr.Note : '';
               OrderNotes['UserID'] = userId;
               OrderNotes['DtTm'] = DtTm;
-              formData['OrderNotes'] = OrderNotes;
+              OrderNotesArr.push(OrderNotes);
             }
           }
+          formData['OrderNotes'] = OrderNotesArr;
           returnData['OrderHdr'] = formData;
         }
         OrdersArr.push(returnData);
@@ -523,9 +526,6 @@ const formOrdersMdaNew = (request, result, cb) => {
   ordersObj['OrderUpdTime'] = OrderUpdTime;
 
   const userSessionArr = {};
-
-  // console.log("userSession", userSession, Object.keys(userSession).length )
-  
   if (userSession && Object.keys(userSession).length > 0) {
     userSessionArr['SessionID'] = userSession[0].SessionID;
     userSessionArr['LogOffTime'] = userSession[0].LogOffTime;

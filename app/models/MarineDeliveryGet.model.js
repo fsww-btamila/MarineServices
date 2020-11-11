@@ -121,12 +121,12 @@ getServices.getSourceTanks = async (req, result) => {
     try {
         const request = poolConn.request();
         let formParams = "";
-        let CompanyID = req.CompanyID;
+        let CompanyID = "'"+req.CompanyID+"'";
         let CustomerID = req.CustomerID;
         let INSiteID = req.INSiteID;
         let ProdContID = req.ProdContID;
-        let IsBillingItem = req.IsBillingItem;
-        let OrderDate = req.OrderDate;
+        let IsBillingItem = "'"+req.IsBillingItem+"'";
+        let OrderDate =  req.OrderDate;
 
         if (OrderDate) {
             let OrderDate = req.OrderDate;
